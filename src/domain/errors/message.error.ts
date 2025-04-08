@@ -1,0 +1,1 @@
+export interface ErrotMessage { field: string, message: string }

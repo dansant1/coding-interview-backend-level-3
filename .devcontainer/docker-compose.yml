@@ -1,0 +1,38 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: backend_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    container_name: backend_api
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://admin:admin@db:5432/mydb?schema=public"
+    volumes:
+      - ../:/app
+    command: >
+      sh -c "
+        npx prisma generate --schema=src/prisma/schema.prisma &&
+        npx prisma migrate dev --name init --schema=src/prisma/schema.prisma &&
+        npm start
+      "
+volumes:
+  pgdata:
