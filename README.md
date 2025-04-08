@@ -91,7 +91,7 @@ cd coding-interview-backend-level-3
 
 - **API Port**: The API runs on port `4000` by default.
 
-  You can access the API at `http://localhost:4000`.
+  You can access the API at `http://0.0.0.0:4000`.
 
 ---
 
